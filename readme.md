@@ -4,6 +4,7 @@
 
  *  PNG
  *  PDF
+ *  PS
  *  SVG
  *  Raw memory buffer image
 
