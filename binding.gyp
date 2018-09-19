@@ -36,6 +36,7 @@
 				[ "OS!='mac' and OS!='win'", {
 					"cflags": [
 						"<@(cflags)",
+						"-fpermissive",
 						"-std=c++0x"
 					],
 					"ldflags": [

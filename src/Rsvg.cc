@@ -83,15 +83,24 @@ NAN_METHOD(Rsvg::New) {
             gsize length = Buffer::Length(ARGVAR[0]);
 
             GError* error = NULL;
-            handle = rsvg_handle_new_from_data(buffer, length, &error);
-
+            //handle = rsvg_handle_new_from_data(buffer, length, &error);
+            handle = rsvg_handle_new_with_flags((RsvgHandleFlags)RSVG_HANDLE_FLAG_UNLIMITED+RSVG_HANDLE_FLAG_KEEP_IMAGE_DATA);
+            rsvg_handle_write(handle, buffer, length, &error);
             if (error) {
                 Nan::ThrowError(error->message);
                 g_error_free(error);
                 return ARGVAR.GetReturnValue().Set(Nan::Undefined());
             }
+            error = NULL;
+            rsvg_handle_close(handle, &error);
+            if (error) {
+                Nan::ThrowError(error->message);
+                g_error_free(error);
+                return ARGVAR.GetReturnValue().Set(Nan::Undefined());
+            }
+            
         } else {
-            handle = rsvg_handle_new();
+            handle = rsvg_handle_new_with_flags((RsvgHandleFlags)RSVG_HANDLE_FLAG_UNLIMITED+RSVG_HANDLE_FLAG_KEEP_IMAGE_DATA);
         }
         // Error handling.
         if (!handle) {
