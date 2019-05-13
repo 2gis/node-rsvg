@@ -3,7 +3,7 @@
 		"GTK_Root%": "c:\\gtk",
 		"conditions": [
 			[ "OS == 'mac'", {
-				"pkg_env": "PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig"
+				"pkg_env": "PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig:<!(echo $PKG_CONFIG_PATH)"
 			}, {
 				"pkg_env": ""
 			}]
