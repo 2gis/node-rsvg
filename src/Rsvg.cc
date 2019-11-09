@@ -3,6 +3,7 @@
 #include "Enums.h"
 #include <node_buffer.h>
 #include <cairo-pdf.h>
+#include <cairo-ps.h>
 #include <cairo-svg.h>
 #include <string>
 #include <iostream>
@@ -82,15 +83,24 @@ NAN_METHOD(Rsvg::New) {
             gsize length = Buffer::Length(ARGVAR[0]);
 
             GError* error = NULL;
-            handle = rsvg_handle_new_from_data(buffer, length, &error);
-
+            //handle = rsvg_handle_new_from_data(buffer, length, &error);
+            handle = rsvg_handle_new_with_flags((RsvgHandleFlags)RSVG_HANDLE_FLAG_UNLIMITED+RSVG_HANDLE_FLAG_KEEP_IMAGE_DATA);
+            rsvg_handle_write(handle, buffer, length, &error);
             if (error) {
                 Nan::ThrowError(error->message);
                 g_error_free(error);
                 return ARGVAR.GetReturnValue().Set(Nan::Undefined());
             }
+            error = NULL;
+            rsvg_handle_close(handle, &error);
+            if (error) {
+                Nan::ThrowError(error->message);
+                g_error_free(error);
+                return ARGVAR.GetReturnValue().Set(Nan::Undefined());
+            }
+            
         } else {
-            handle = rsvg_handle_new();
+            handle = rsvg_handle_new_with_flags((RsvgHandleFlags)RSVG_HANDLE_FLAG_UNLIMITED+RSVG_HANDLE_FLAG_KEEP_IMAGE_DATA);
         }
         // Error handling.
         if (!handle) {
@@ -313,7 +323,8 @@ NAN_METHOD(Rsvg::Render) {
         return ARGVAR.GetReturnValue().Set(Nan::Undefined());
     } else if (
             renderFormat == RENDER_FORMAT_SVG ||
-            renderFormat == RENDER_FORMAT_PDF) {
+            renderFormat == RENDER_FORMAT_PDF ||
+            renderFormat == RENDER_FORMAT_PS) {
         pixelFormat = CAIRO_FORMAT_INVALID;
     } else if (renderFormat == RENDER_FORMAT_VIPS) {
         Nan::ThrowError("Format not supported: VIPS");
@@ -369,6 +380,8 @@ NAN_METHOD(Rsvg::Render) {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
         cairo_pdf_surface_restrict_to_version(surface, CAIRO_PDF_VERSION_1_4);
 #endif
+    }  else if (renderFormat == RENDER_FORMAT_PS) {
+        surface = cairo_ps_surface_create_for_stream(GetDataChunks, &data, width, height);
     } else {
         surface = cairo_image_surface_create(pixelFormat, width, height);
     }

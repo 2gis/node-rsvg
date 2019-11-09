@@ -21,6 +21,8 @@ render_format_t RenderFormatFromString(const char* formatString) {
 		return RENDER_FORMAT_JPEG;
 	} else if (std::strcmp(formatString, "pdf") == 0) {
 		return RENDER_FORMAT_PDF;
+	} else if (std::strcmp(formatString, "ps") == 0) {
+		return RENDER_FORMAT_PS;
 	} else if (std::strcmp(formatString, "svg") == 0) {
 		return RENDER_FORMAT_SVG;
 	} else if (std::strcmp(formatString, "vips") == 0) {
@@ -36,6 +38,7 @@ Handle<Value> RenderFormatToString(render_format_t format) {
 		format == RENDER_FORMAT_PNG ? "png" :
 		format == RENDER_FORMAT_JPEG ? "jpeg" :
 		format == RENDER_FORMAT_PDF ? "pdf" :
+		format == RENDER_FORMAT_PS ? "ps" :
 		format == RENDER_FORMAT_SVG ? "svg" :
 		format == RENDER_FORMAT_VIPS ? "vips" :
 		NULL;

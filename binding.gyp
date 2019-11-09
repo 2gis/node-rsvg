@@ -21,7 +21,7 @@
 				"<!(node -e \"require('nan')\")" 
 			],
 			"variables": {
-				"packages": "librsvg-2.0 cairo-png cairo-pdf cairo-svg",
+				"packages": "librsvg-2.0 cairo-png cairo-pdf cairo-ps cairo-svg",
 				"conditions": [
 					[ "OS!='win'", {
 						"libraries": "<!(<(pkg_env) pkg-config --libs-only-l <(packages))",
@@ -36,6 +36,7 @@
 				[ "OS!='mac' and OS!='win'", {
 					"cflags": [
 						"<@(cflags)",
+						"-fpermissive",
 						"-std=c++0x"
 					],
 					"ldflags": [

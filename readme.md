@@ -10,6 +10,7 @@ If you have any issues, you can try [prebuilt node-rsvg](https://github.com/f3la
 
  *  PNG
  *  PDF
+ *  PS
  *  SVG
  *  Raw memory buffer image
 

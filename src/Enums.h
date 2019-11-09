@@ -12,8 +12,9 @@ typedef enum {
 	RENDER_FORMAT_PNG = 1,
 	RENDER_FORMAT_JPEG = 2,
 	RENDER_FORMAT_PDF = 3,
-	RENDER_FORMAT_SVG = 4,
-	RENDER_FORMAT_VIPS = 5
+	RENDER_FORMAT_PS = 4,
+	RENDER_FORMAT_SVG = 5,
+	RENDER_FORMAT_VIPS = 6
 } render_format_t;
 
 render_format_t RenderFormatFromString(const char* formatString);
