@@ -90,7 +90,7 @@ NAN_METHOD(Rsvg::New) {
                 return ARGVAR.GetReturnValue().Set(Nan::Undefined());
             }
         } else {
-            handle = rsvg_handle_new();
+            handle = rsvg_handle_new_with_flags(RSVG_HANDLE_FLAG_KEEP_IMAGE_DATA);
         }
         // Error handling.
         if (!handle) {
